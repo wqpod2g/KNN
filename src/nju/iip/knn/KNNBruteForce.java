@@ -21,13 +21,13 @@ public class KNNBruteForce {
 	 */	
 	private static Map<String,Double> keywordsMap=new LinkedHashMap<String,Double>();
 	
-	
 	/**
-	 * 整个样本向量，值为tf*idf
+	 * 整个样本二维矩阵，值为tf*idf
 	 */
-	private static Map<String,ArrayList<ArrayList<Double>>>allVector=new LinkedHashMap<String,ArrayList<ArrayList<Double>>>();
+	private static ArrayList<ArrayList<Double>>allMatrix=new ArrayList<ArrayList<Double>>();
 	
 	private static String SamplePath="lily";//文本路径
+	
 	
 	/**
 	 * @Description: 返回特征向量词的map<word,idf>，800个词
@@ -53,12 +53,12 @@ public class KNNBruteForce {
 	/**
 	 * @description 计算一个帖子的特征向量
 	 * @param content
+	 * @param 帖子所属类别ID
 	 * @return ArrayList
 	 * @throws IOException 
 	 */
-	public static ArrayList<Double>getOneArticleVector(String content) throws IOException{
+	public static ArrayList<Double>getOneArticleVector(String content,Double ID) throws IOException{
 		ArrayList<Double>Vector=new ArrayList<Double>();
-		Vector.add(1.0);
 		Map<String,Long>articleWordsMap=ChineseTokenizer.segStr(content);
 		Set<String>words=articleWordsMap.keySet();
 		Long size=Long.valueOf(0);
@@ -76,7 +76,7 @@ public class KNNBruteForce {
 			else
 				Vector.add(Double.valueOf(0));
 		}
-		
+		Vector.add(ID);
 		return Vector;//返回一个帖子的特征向量X(1,x1，x2....x800)
 	}
 	
@@ -89,13 +89,13 @@ public class KNNBruteForce {
 	 * @throws IOException
 	 */
 	
-	public static ArrayList<ArrayList<Double>>getOneClassVector(String classification) throws IOException{
+	public static ArrayList<ArrayList<Double>>getOneClassVector(String classification,Double ID) throws IOException{
 		ArrayList<ArrayList<Double>>classVector=new ArrayList<ArrayList<Double>>();
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(classification), "UTF8")); 
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(classification), "UTF-8")); 
         String line = br.readLine();
         int n=1;
         while(line != null&&n<=20){  
-        	ArrayList<Double>Vector=getOneArticleVector(line);
+        	ArrayList<Double>Vector=getOneArticleVector(line,ID);
         	classVector.add(Vector);
         	//System.out.println(i+"      "+line);
         	line = br.readLine();
@@ -114,17 +114,42 @@ public class KNNBruteForce {
 	 * @throws IOException
 	 */
 	
-	public static Map<String,ArrayList<ArrayList<Double>>>getAllVector() throws FileNotFoundException, IOException{
+	public static ArrayList<ArrayList<Double>>getAllMatrix() throws FileNotFoundException, IOException{
 		List<String>fileList=Tools.readDirs(SamplePath);
+		Double ID=1.0;
 		for(String article:fileList){
-			allVector.put(article, getOneClassVector(article));
+			allMatrix.addAll(getOneClassVector(article,ID));
+			ID++;
 		}
 		
-		return allVector;
+		return allMatrix;
 	}
 	
 	
-	public static void main(String args[]){
+	
+	
+	
+	
+	/**
+	 * @description 求2个向量的欧式距离
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public static Double vectorDistance(ArrayList<Double>x,ArrayList<Double>y){
+		Double value=0.0;
+		for(int i=0;i<x.size();i++){
+			value=value+(x.get(i)-y.get(i))*(x.get(i)-y.get(i));
+		}
+		return Math.sqrt(value);
+
+	}
+	
+	
+	public static void main(String args[]) throws FileNotFoundException, IOException{
+		getAllMatrix();
+		System.out.println(allMatrix.size());
+		System.out.println(allMatrix.get(3).size());
 		
 	}
 		

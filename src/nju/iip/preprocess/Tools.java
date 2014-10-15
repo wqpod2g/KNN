@@ -52,7 +52,7 @@ public class Tools {
     public static String readFile(String file) throws FileNotFoundException, IOException
     {
         StringBuffer strSb = new StringBuffer(); //String is constant， StringBuffer can be changed.
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8")); 
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")); 
         String line = br.readLine();
         while(line != null){
             strSb.append(line).append("\r\n");
