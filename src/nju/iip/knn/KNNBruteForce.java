@@ -17,6 +17,11 @@ import nju.iip.preprocess.Tools;
 public class KNNBruteForce {
 	
 	/**
+	 *  K most similar
+	 */
+	private static int k=20;
+	
+	/**
 	 * 特征向量所包含的关键词Map（每类中取tf*idf前100大的）
 	 */	
 	private static Map<String,Double> keywordsMap=new LinkedHashMap<String,Double>();
@@ -25,6 +30,11 @@ public class KNNBruteForce {
 	 * 整个样本二维矩阵，值为tf*idf
 	 */
 	private static ArrayList<ArrayList<Double>>allMatrix=new ArrayList<ArrayList<Double>>();
+	
+	/**
+	 * 某个点与其他所有点的距离
+	 */
+	private static ArrayList<ArrayList<Double>>distanceResult=new ArrayList<ArrayList<Double>>();
 	
 	private static String SamplePath="lily";//文本路径
 	
@@ -138,7 +148,7 @@ public class KNNBruteForce {
 	 */
 	public static Double vectorDistance(ArrayList<Double>x,ArrayList<Double>y){
 		Double value=0.0;
-		for(int i=0;i<x.size();i++){
+		for(int i=0;i<x.size()-1;i++){
 			value=value+(x.get(i)-y.get(i))*(x.get(i)-y.get(i));
 		}
 		return Math.sqrt(value);
@@ -146,10 +156,83 @@ public class KNNBruteForce {
 	}
 	
 	
+	
+	/**
+	 * 计算某个帖子与其余所有帖子的距离
+	 * @param x
+	 * @return
+	 */
+	public static ArrayList<ArrayList<Double>> getDistanceResult(ArrayList<Double>x){
+		
+		for(int i=0;i<allMatrix.size();i++){
+			ArrayList<Double>dis=new ArrayList<Double>();
+			dis.add(allMatrix.get(i).get(800));//添加帖子所属类别
+			dis.add(vectorDistance(allMatrix.get(i),x));
+			distanceResult.add(dis);
+			
+		}
+		return distanceResult;
+	}
+	
+	/**
+	 * 求出距离前k小的点
+	 * @param k
+	 * @return
+	 */
+	public static ArrayList<ArrayList<Double>>getKNNResult(){
+		ArrayList<ArrayList<Double>>KNNDis=new ArrayList<ArrayList<Double>>();
+		for(int i=0;i<k+1;i++){
+			for(int j=0;j<200-i-1;j++){
+				if(distanceResult.get(j).get(1)<distanceResult.get(j+1).get(1)){
+					ArrayList<Double>temp=distanceResult.get(j);
+					distanceResult.set(j, distanceResult.get(j+1));
+					distanceResult.set(j+1, temp);
+				}
+			}
+		}
+		
+		for(int m=198-k+1;m<=198;m++){
+			KNNDis.add(distanceResult.get(m));
+		}
+		return KNNDis;
+	}
+	
+	
+	public static void process(){
+		for(int l=1;l<=5;l++){
+			k=10*l;
+		ArrayList<Double>precision=new ArrayList<Double>();
+		for(int i=0;i<200;i++){
+			getDistanceResult(allMatrix.get(i));
+			ArrayList<ArrayList<Double>>KNNDis=getKNNResult();
+			Double n=0.0;
+			for(int j=0;j<k;j++){
+				if(KNNDis.get(j).get(0)==allMatrix.get(i).get(800)){
+					n++;
+					
+				}
+			}
+			precision.add(n/k);
+			distanceResult.clear();
+		}
+		System.out.println("当k="+l*10+"：");
+		System.out.println("precision均值为："+Tools.getMean(precision));
+		System.out.println("precision标准差为："+Tools.getDeviation(precision)+"\n");
+		}
+	}
+	
+	
+	
 	public static void main(String args[]) throws FileNotFoundException, IOException{
 		getAllMatrix();
-		System.out.println(allMatrix.size());
-		System.out.println(allMatrix.get(3).size());
+		long startTime=System.currentTimeMillis();   //获取开始时间
+		process();
+		long endTime=System.currentTimeMillis(); //获取结束时间   
+		System.out.println("时间： "+(endTime-startTime)+"ms");
+//		getDistanceResult(allMatrix.get(1));
+//		ArrayList<ArrayList<Double>>KNNDis=getKNNResult();
+//		System.out.println(KNNDis);
+		//System.out.println(allMatrix.get(20).get(800));
 		
 	}
 		

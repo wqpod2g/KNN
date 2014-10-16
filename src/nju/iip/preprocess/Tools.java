@@ -73,7 +73,7 @@ public class Tools {
 		for(int i=0;i<list.size();i++){
 			sum=sum+list.get(i);
 		}
-		Double mean=sum/10;
+		Double mean=sum/list.size();
 		return mean;
     }
     
