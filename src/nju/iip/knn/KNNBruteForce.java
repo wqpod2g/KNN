@@ -10,10 +10,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import nju.iip.preprocess.ChineseTokenizer;
 import nju.iip.preprocess.Tools;
 
+
+/**
+ * @description 用暴力方式求出某个帖子的K-Nearest Neighbor，并计算precision
+ * @time 201-10-16
+ * @author wangqiang
+ */
 public class KNNBruteForce {
 	
 	/**
@@ -79,8 +84,8 @@ public class KNNBruteForce {
 		Set<String>keywords=keywordsMap.keySet();
 		for(String keyword:keywords){
 			if(articleWordsMap.containsKey(keyword)){
-				Double tf=Double.valueOf(articleWordsMap.get(keyword))/size;
-				Vector.add(tf*keywordsMap.get(keyword));
+				
+				Vector.add(articleWordsMap.get(keyword)*1.0);
 			}
 			
 			else
@@ -197,7 +202,9 @@ public class KNNBruteForce {
 		return KNNDis;
 	}
 	
-	
+	/**
+	 * @description 处理数据
+	 */
 	public static void process(){
 		for(int l=1;l<=5;l++){
 			k=10*l;
@@ -229,10 +236,7 @@ public class KNNBruteForce {
 		process();
 		long endTime=System.currentTimeMillis(); //获取结束时间   
 		System.out.println("时间： "+(endTime-startTime)+"ms");
-//		getDistanceResult(allMatrix.get(1));
-//		ArrayList<ArrayList<Double>>KNNDis=getKNNResult();
-//		System.out.println(KNNDis);
-		//System.out.println(allMatrix.get(20).get(800));
+
 		
 	}
 		
