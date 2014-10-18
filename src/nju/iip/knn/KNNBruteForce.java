@@ -14,6 +14,8 @@ import nju.iip.preprocess.Tools;
  */
 public class KNNBruteForce {
 	
+	private static int keyWordsNum=800;//特征词个数
+	
 	/**
 	 *  K most similar
 	 */
@@ -61,8 +63,8 @@ public class KNNBruteForce {
 		
 		for(int i=0;i<allMatrix.size();i++){
 			ArrayList<Double>dis=new ArrayList<Double>();
-			dis.add(allMatrix.get(i).get(800));//添加帖子所属类别
 			dis.add(Tools.vectorDistance(allMatrix.get(i),x));
+			dis.add(allMatrix.get(i).get(keyWordsNum));//添加帖子所属类别
 			distanceResult.add(dis);
 			
 		}
@@ -78,7 +80,7 @@ public class KNNBruteForce {
 		ArrayList<ArrayList<Double>>KNNDis=new ArrayList<ArrayList<Double>>();
 		for(int i=0;i<k+1;i++){
 			for(int j=0;j<200-i-1;j++){
-				if(distanceResult.get(j).get(1)<distanceResult.get(j+1).get(1)){
+				if(distanceResult.get(j).get(0)<distanceResult.get(j+1).get(0)){
 					ArrayList<Double>temp=distanceResult.get(j);
 					distanceResult.set(j, distanceResult.get(j+1));
 					distanceResult.set(j+1, temp);
@@ -103,7 +105,7 @@ public class KNNBruteForce {
 			ArrayList<ArrayList<Double>>KNNDis=getKNNResult();
 			Double n=0.0;
 			for(int j=0;j<k;j++){
-				if(KNNDis.get(j).get(0)==allMatrix.get(i).get(800)){
+				if(KNNDis.get(j).get(1)==allMatrix.get(i).get(keyWordsNum)){
 					n++;
 				}
 			}

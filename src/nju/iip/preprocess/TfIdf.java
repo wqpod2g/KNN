@@ -13,6 +13,8 @@ import java.util.Set;
 public class TfIdf {
 	
 	private static String SamplePath="lily";//文本路径
+	
+	private static int keyWordsNum=800;//特征词个数
 
 	/**
 	 * 特征向量所包含的关键词（每类中取tf*idf前80大的）
@@ -220,8 +222,8 @@ public class TfIdf {
     			tfIdfList.add(tfIdf.get(word));
     		}
     		Collections.sort(tfIdfList);
-    		Double value=tfIdfList.get(tfIdfList.size()-106);
-    		
+    		Double value=tfIdfList.get(tfIdfList.size()-114);
+    		//System.out.println("*************"+tfIdfList.size());
     		int j=0;
     		for(String word:words){
     			if(tfIdf.get(word)>=value&&!keywords.containsKey(word)){
@@ -229,7 +231,7 @@ public class TfIdf {
     				
     				j++;
     			}
-    			if(j==80)
+    			if(j==keyWordsNum)
     				break;
     		}
     		
