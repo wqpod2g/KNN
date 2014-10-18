@@ -15,7 +15,7 @@ public class TfIdf {
 	private static String SamplePath="lily";//文本路径
 
 	/**
-	 * 特征向量所包含的关键词（每类中取tf*idf前100大的）
+	 * 特征向量所包含的关键词（每类中取tf*idf前80大的）
 	 */	
 	public static Map<String,Double> keywords=new LinkedHashMap<String,Double>();
 	
