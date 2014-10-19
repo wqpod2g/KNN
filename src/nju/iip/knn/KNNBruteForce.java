@@ -14,12 +14,12 @@ import nju.iip.preprocess.Tools;
  */
 public class KNNBruteForce {
 	
-	private static int keyWordsNum=800;//特征词个数
+	private static int keyWordsNum=3000;//特征词个数
 	
 	/**
 	 *  K most similar
 	 */
-	private static int k=20;
+	private static int k=0;
 	
 	/**
 	 * 整个样本二维矩阵
@@ -63,7 +63,7 @@ public class KNNBruteForce {
 		
 		for(int i=0;i<allMatrix.size();i++){
 			ArrayList<Double>dis=new ArrayList<Double>();
-			dis.add(Tools.vectorDistance(allMatrix.get(i),x));
+			dis.add(Tools.vectorCosTheta(allMatrix.get(i),x));
 			dis.add(allMatrix.get(i).get(keyWordsNum));//添加帖子所属类别
 			distanceResult.add(dis);
 			
@@ -80,7 +80,7 @@ public class KNNBruteForce {
 		ArrayList<ArrayList<Double>>KNNDis=new ArrayList<ArrayList<Double>>();
 		for(int i=0;i<k+1;i++){
 			for(int j=0;j<200-i-1;j++){
-				if(distanceResult.get(j).get(0)<distanceResult.get(j+1).get(0)){
+				if(distanceResult.get(j).get(0)>distanceResult.get(j+1).get(0)){
 					ArrayList<Double>temp=distanceResult.get(j);
 					distanceResult.set(j, distanceResult.get(j+1));
 					distanceResult.set(j+1, temp);

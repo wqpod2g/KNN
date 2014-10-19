@@ -198,7 +198,7 @@ public class Tools {
 		for(String keyword:keywords){
 			if(articleWordsMap.containsKey(keyword)){
 				
-				Vector.add(articleWordsMap.get(keyword)*1.0);
+				Vector.add(1.0);
 			}
 			
 			else
