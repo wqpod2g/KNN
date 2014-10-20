@@ -219,6 +219,7 @@ public class KNNSearchByLSH {
 	 */
     public static void process(){
     	for(int l=1;l<=5;l++){
+    		long startTime=System.currentTimeMillis();   //获取开始时间
     		k=10*l;
     		ArrayList<Double>precision=new ArrayList<Double>();
     		for(int i=0;i<200;i++){
@@ -234,7 +235,10 @@ public class KNNSearchByLSH {
     		}
     		System.out.println("当k="+l*10+"：");
     		System.out.println("precision均值为："+Tools.getMean(precision));
-    		System.out.println("precision标准差为："+Tools.getDeviation(precision)+"\n");
+    		System.out.println("precision标准差为："+Tools.getDeviation(precision));
+    		long endTime=System.currentTimeMillis(); //获取结束时间   
+    		System.out.println("时间： "+(endTime-startTime)+"ms"+"\n");
+    		
     		}
     		
     		
