@@ -169,7 +169,7 @@ public class Tools {
 	        String line = br.readLine();
 	        while(line != null){  
 	        	String[] str=line.split("=");
-	        	Double idf=Double.parseDouble(str[1]);
+	        	Double idf=Double.valueOf(str[1]);
 	        	keywordsMap.put(str[0],idf);
 	            line = br.readLine();    
 	        }
@@ -243,11 +243,11 @@ public class Tools {
 		   return result;
 		}
     
-//    public static void main(String args[]) throws FileNotFoundException, IOException{
-//    	List<String>file=readDirs("D:\\dir");
-//    	for(String f:file){
-//    		System.out.println(readFile(f));
-//    	}
-//    }
+    public static void main(String args[]) throws FileNotFoundException, IOException{
+    	List<String>file=readDirs("D:\\lily");
+    	for(String f:file){
+    		System.out.println(readFile(f));
+    	}
+    }
 
 }
