@@ -125,7 +125,6 @@ public class KNNBruteForce {
 	
 	public static void main(String args[]) throws FileNotFoundException, IOException{
 		getAllMatrix();
-		
 		process();
 		
 	}
